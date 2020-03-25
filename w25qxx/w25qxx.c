@@ -130,6 +130,11 @@ void W25QXX_Read(uint32_t address, uint8_t *buffer, uint16_t count)
     uint8_t cmd = 0x03;
     uint8_t temp;
 
+    if (!count)
+	{
+	return;
+	}
+
     HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_RESET);
 
     HAL_SPI_Transmit(&W25QXX_SPI, &cmd, 1, 100);
@@ -146,39 +151,6 @@ void W25QXX_Read(uint32_t address, uint8_t *buffer, uint16_t count)
     HAL_SPI_Receive(&W25QXX_SPI, buffer, count, 5000);
 
     HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_SET);
-    }
-
-void W25QXX_Write_Page(uint32_t address, uint8_t *buffer, uint16_t count)
-    {
-    uint8_t cmd = 0x02;
-    uint8_t temp;
-
-    if(!count)
-	{
-	return;
-	}
-
-    W25QXX_Write_Enable();
-    W25QXX_Wait_Busy();
-
-    HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_RESET);
-
-    HAL_SPI_Transmit(&W25QXX_SPI, &cmd, 1, 100);
-
-    temp = address>>16;
-    HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
-
-    temp = address>>8;
-    HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
-
-    temp = address;
-    HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
-
-    HAL_SPI_Transmit(&W25QXX_SPI, buffer, count, 5000);
-
-    HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_SET);
-
-    W25QXX_Wait_Busy();
     }
 
 void W25QXX_Erase_Sector(uint32_t sector_number)
@@ -202,6 +174,39 @@ void W25QXX_Erase_Sector(uint32_t sector_number)
 
     temp = address;
     HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
+
+    HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_SET);
+
+    W25QXX_Wait_Busy();
+    }
+
+void W25QXX_Write_Page(uint32_t address, uint8_t *buffer, uint16_t count)
+    {
+    uint8_t cmd = 0x02;
+    uint8_t temp;
+
+    if (!count || count > W25QXX_PAGE_SIZE)
+	{
+	return;
+	}
+
+    W25QXX_Write_Enable();
+    W25QXX_Wait_Busy();
+
+    HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_RESET);
+
+    HAL_SPI_Transmit(&W25QXX_SPI, &cmd, 1, 100);
+
+    temp = address>>16;
+    HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
+
+    temp = address>>8;
+    HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
+
+    temp = address;
+    HAL_SPI_Transmit(&W25QXX_SPI, &temp, 1, 100);
+
+    HAL_SPI_Transmit(&W25QXX_SPI, buffer, count, 5000);
 
     HAL_GPIO_WritePin(W25QXX_CS_GPIO_Port, W25QXX_CS_Pin, GPIO_PIN_SET);
 

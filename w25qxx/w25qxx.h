@@ -10,7 +10,7 @@
 
 #include "main.h"
 
-#define W25QXX_TOTAL_SIZE     8000000u
+#define W25QXX_TOTAL_SIZE     (8*1024*1024)
 #define W25QXX_ID             0xEF4017
 #define W25QXX_PAGE_SIZE      256
 #define	W25QXX_PAGE_COUNT     (W25QXX_TOTAL_SIZE/W25QXX_PAGE_SIZE)
