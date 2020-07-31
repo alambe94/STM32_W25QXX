@@ -29,12 +29,13 @@
 		<nature>com.st.stm32cube.ide.mcu.MCURootProjectNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
+		<nature>com.st.stm32cube.ide.mcu.MCUCubeIdeServicesRevAev2ProjectNature</nature>
 	</natures>
 	<linkedResources>
 		<link>
 			<name>w25qxx</name>
 			<type>2</type>
-			<location>D:/ST/STM32_W25QXX/w25qxx</location>
+			<location>C:/Users/lambe/STM32CubeIDE/workspace_1.3.0/STM32_W25QXX/w25qxx</location>
 		</link>
 	</linkedResources>
 </projectDescription>
